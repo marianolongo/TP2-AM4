@@ -38,7 +38,41 @@ def interpolateLatitud():
     plt.plot(newLat, newAlt)
     plt.show()
 
+def extrapolateLatitud():
+    headers = ['Altura', 'Latitud', 'Longitud']
+    data = pd.read_csv("coordenadas.csv", names=headers)
+    newLat = []
+    newAlt = []
+    i = 0
+    while i <= 1000:
+        fp = data['Latitud']
+        xp = data['Altura']
+        y_inter = ip.interp1d(xp, fp, fill_value="extrapolate")
+        newLat.append(y_inter(i))
+        newAlt.append(i)
+        i += 10
+    plt.plot(newLat, newAlt)
+    plt.show()
+
+def extrapolateLongitud():
+    headers = ['Altura', 'Latitud', 'Longitud']
+    data = pd.read_csv("coordenadas.csv", names=headers)
+    newLong = []
+    newAlt = []
+    i = 0
+    while i <= 1000:
+        fp = data['Longitud']
+        xp = data['Altura']
+        y_inter = ip.interp1d(xp, fp, fill_value="extrapolate")
+        newLong.append(y_inter(i))
+        newAlt.append(i)
+        i += 10
+    plt.plot(newLong, newAlt)
+    plt.show()
+
 
 if __name__ == '__main__':
     # interpolateLongitud()
-    interpolateLatitud()
+    # interpolateLatitud()
+    # extrapolateLatitud()
+    extrapolateLongitud()
