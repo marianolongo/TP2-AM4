@@ -1,11 +1,11 @@
-import csv
 import pandas as pd
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-import numpy as np
 from scipy import interpolate as ip
+from mpl_toolkits.mplot3d import Axes3D
 
 
-def interpolateLongitud():
+def interpolate_longitude(aux):
     headers = ['Altura', 'Latitud', 'Longitud']
     data = pd.read_csv("coordenadas.csv", names=headers)
     newLong = []
@@ -17,12 +17,13 @@ def interpolateLongitud():
         y_inter = ip.interp1d(xp, fp)
         newLong.append(y_inter(i))
         newAlt.append(i)
-        i += 10
-    plt.plot(newLong, newAlt)
-    plt.show()
+        i += aux
+    # plt.plot(newLong, newAlt)
+    # plt.show()
+    return newLong
 
 
-def interpolateLatitud():
+def interpolate_latitude(aux):
     headers = ['Altura', 'Latitud', 'Longitud']
     data = pd.read_csv("coordenadas.csv", names=headers)
     newLat = []
@@ -34,11 +35,13 @@ def interpolateLatitud():
         y_inter = ip.interp1d(xp, fp)
         newLat.append(y_inter(i))
         newAlt.append(i)
-        i += 10
-    plt.plot(newLat, newAlt)
-    plt.show()
+        i += aux
+    # plt.plot(newLat, newAlt)
+    # plt.show()
+    return newLat
 
-def extrapolateLatitud():
+
+def extrapolate_latitude(aux):
     headers = ['Altura', 'Latitud', 'Longitud']
     data = pd.read_csv("coordenadas.csv", names=headers)
     newLat = []
@@ -50,11 +53,13 @@ def extrapolateLatitud():
         y_inter = ip.interp1d(xp, fp, fill_value="extrapolate")
         newLat.append(y_inter(i))
         newAlt.append(i)
-        i += 10
-    plt.plot(newLat, newAlt)
-    plt.show()
+        i += aux
+    # plt.plot(newLat, newAlt)
+    # plt.show()
+    return newLat
 
-def extrapolateLongitud():
+
+def extrapolate_longitude(aux):
     headers = ['Altura', 'Latitud', 'Longitud']
     data = pd.read_csv("coordenadas.csv", names=headers)
     newLong = []
@@ -66,13 +71,65 @@ def extrapolateLongitud():
         y_inter = ip.interp1d(xp, fp, fill_value="extrapolate")
         newLong.append(y_inter(i))
         newAlt.append(i)
-        i += 10
-    plt.plot(newLong, newAlt)
+        i += aux
+    # plt.plot(newLong, newAlt)
+    # plt.show()
+    return newAlt
+
+
+def create_interpolated10_csv(aux):
+    new_interpolated_latitudes = interpolate_latitude(aux)
+    new_interpolated_longitudes = interpolate_longitude(aux)
+    new_extrapolated_longitudes = extrapolate_longitude(aux)
+    new_extrapolated_latitudes = extrapolate_latitude(aux)
+
+    with open('coordenadas_interpoladas' + str(aux) + '.csv', 'w+') as f:
+        print("Altura,Latitud,Longitud", file=f)
+        altura = 50000
+        i = new_interpolated_latitudes.__len__() - 1
+        while altura >= 1000:
+            print(str(altura))
+            print(str(altura) + "," + str(new_interpolated_latitudes[i]) + "," + str(new_interpolated_longitudes[i]),
+                  file=f)
+            altura -= aux
+            i -= 1
+        i = new_extrapolated_latitudes.__len__() - 1
+        while altura >= 0:
+            print(str(altura))
+            print(str(altura) + "," + str(new_extrapolated_latitudes[i]) + "," + str(new_extrapolated_longitudes[i]),
+                  file=f)
+            altura -= aux
+            i -= 1
+
+
+def plot_3d():
+    csv = pd.read_csv("coordenadas_interpoladas10")
+    x = csv["Latitud"]
+    y = csv["Longitud"]
+    z = csv["Altura"]
+
+    plt.plot(x.values, z.values)
+    plt.ylabel("Altura")
+    plt.xlabel("Latitud")
+    plt.show()
+
+    plt.plot(y.values, z.values)
+    plt.ylabel("Altura")
+    plt.xlabel("Longitud")
+    plt.show()
+
+    mpl.rcParams['legend.fontsize'] = 10
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    ax.plot(x, y, z)
+    ax.legend()
+    plt.xlabel("Latitud")
+    plt.ylabel("Longitud")
+
     plt.show()
 
 
 if __name__ == '__main__':
-    # interpolateLongitud()
-    # interpolateLatitud()
-    # extrapolateLatitud()
-    extrapolateLongitud()
+    # create_interpolated10_csv(10)
+    # create_interpolated10_csv(1)
+    plot_3d()
