@@ -108,16 +108,6 @@ def plot_3d():
     y = csv["Longitud"]
     z = csv["Altura"]
 
-    plt.plot(x.values, z.values)
-    plt.ylabel("Altura")
-    plt.xlabel("Latitud")
-    plt.show()
-
-    plt.plot(y.values, z.values)
-    plt.ylabel("Altura")
-    plt.xlabel("Longitud")
-    plt.show()
-
     mpl.rcParams['legend.fontsize'] = 10
     fig = plt.figure()
     ax = Axes3D(fig)
@@ -129,7 +119,19 @@ def plot_3d():
     plt.show()
 
 
+def plot_2d(aux):
+    csv = pd.read_csv("coordenadas_interpoladas10")
+    alturas = csv["Altura"]
+    datos = csv[aux]
+    plt.plot(datos.values, alturas.values)
+    plt.ylabel("Altura")
+    plt.xlabel(aux)
+    plt.show()
+
+
 if __name__ == '__main__':
-    # create_interpolated10_csv(10)
-    # create_interpolated10_csv(1)
-    plot_3d()
+    create_interpolated10_csv(10)
+    create_interpolated10_csv(1)
+    # plot_3d()
+    # plot_2d("Longitud")
+    # plot_2d("Latitud")
