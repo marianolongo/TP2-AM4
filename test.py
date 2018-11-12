@@ -18,8 +18,6 @@ def interpolate_longitude(aux):
         newLong.append(y_inter(i))
         newAlt.append(i)
         i += aux
-    # plt.plot(newLong, newAlt)
-    # plt.show()
     return newLong
 
 
@@ -54,8 +52,6 @@ def extrapolate_latitude(aux):
         newLat.append(y_inter(i))
         newAlt.append(i)
         i += aux
-    # plt.plot(newLat, newAlt)
-    # plt.show()
     return newLat
 
 
@@ -72,9 +68,7 @@ def extrapolate_longitude(aux):
         newLong.append(y_inter(i))
         newAlt.append(i)
         i += aux
-    # plt.plot(newLong, newAlt)
-    # plt.show()
-    return newAlt
+    return newLong
 
 
 def create_interpolated10_csv(aux):
@@ -83,7 +77,7 @@ def create_interpolated10_csv(aux):
     new_extrapolated_longitudes = extrapolate_longitude(aux)
     new_extrapolated_latitudes = extrapolate_latitude(aux)
 
-    with open('coordenadas_interpoladas' + str(aux) + '.csv', 'w+') as f:
+    with open('coordenadas_interpoladas' + str(aux), 'w+') as f:
         print("Altura,Latitud,Longitud", file=f)
         altura = 50000
         i = new_interpolated_latitudes.__len__() - 1
@@ -130,8 +124,8 @@ def plot_2d(aux):
 
 
 if __name__ == '__main__':
-    create_interpolated10_csv(10)
-    create_interpolated10_csv(1)
-    # plot_3d()
-    # plot_2d("Longitud")
-    # plot_2d("Latitud")
+    # create_interpolated10_csv(10)
+    # create_interpolated10_csv(1)
+    plot_3d()
+    plot_2d("Longitud")
+    plot_2d("Latitud")
