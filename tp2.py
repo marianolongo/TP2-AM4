@@ -71,7 +71,11 @@ def extrapolate_longitude(aux):
     return newLong
 
 
-def create_interpolated10_csv(aux):
+def create_new_coordenadas_csv(aux):
+    """
+    Funcion utilizada para crear las coordenadas interpoladas cada 10km.
+    :param aux: Utilizado para interpolar cada 10km o 1km.
+    """
     new_interpolated_latitudes = interpolate_latitude(aux)
     new_interpolated_longitudes = interpolate_longitude(aux)
     new_extrapolated_longitudes = extrapolate_longitude(aux)
@@ -97,6 +101,9 @@ def create_interpolated10_csv(aux):
 
 
 def plot_3d():
+    """
+    Funcion utilizada para realizar el grafico 3d.
+    """
     csv = pd.read_csv("coordenadas_interpoladas10")
     x = csv["Latitud"]
     y = csv["Longitud"]
@@ -114,6 +121,10 @@ def plot_3d():
 
 
 def plot_2d(aux):
+    """
+    Este metodo es el utilizado para crear los graficos 2d.
+    :param aux: Utilizado para pasarle Longitud y Latitud
+    """
     csv = pd.read_csv("coordenadas_interpoladas10")
     alturas = csv["Altura"]
     datos = csv[aux]
@@ -124,8 +135,8 @@ def plot_2d(aux):
 
 
 if __name__ == '__main__':
-    # create_interpolated10_csv(10)
-    # create_interpolated10_csv(1)
+    create_new_coordenadas_csv(10)
+    create_new_coordenadas_csv(1)
     plot_3d()
     plot_2d("Longitud")
     plot_2d("Latitud")
